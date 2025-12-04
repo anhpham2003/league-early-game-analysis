@@ -6,4 +6,4 @@ plugins:
   - jekyll-remote-theme
 
 url: "https://anhpham2003.github.io"
-baseurl: "/league-of-legends-jungle-impact"
+baseurl: "/league-early-game-analysis"
