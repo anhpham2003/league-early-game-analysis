@@ -3,9 +3,7 @@ layout: default
 title: Ganks, Gold, and Game Outcomes
 ---
 
-# Ganks, Gold, and Game Outcomes: Early Jungle Impact in Pro League of Legends
-
-by Hoang Anh Pham and Lam Hoang
+by Hoang Anh Pham and Lam Hoang  
 
 ---
 
