@@ -1,6 +1,6 @@
 # Ganks, Gold, and Game Outcomes: Early Jungle Impact in Pro League of Legends
 
-by Hoang Anh Phamm and Lam Hoang
+by Hoang Anh Pham and Lam Hoang
 
 ---
 
