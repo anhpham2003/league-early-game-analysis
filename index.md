@@ -25,8 +25,8 @@ To understand the influence of jungle activity, we investigate the gold differen
   src="{{ site.baseurl }}/assets/gold-diff-at-10-by-role.html"
   width="800"
   height="500"
-  frameborder="0"
-></iframe>
+  frameborder="0">
+</iframe>
 
 Across all roles, the distribution of early gold difference appears similar. No role consistently dominates or falls behind at 10 minutes, suggesting that early-game performance varies mainly from game-to-game rather than being role-driven. This motivates examining other factors such as jungle presence to explain early advantages.
 
@@ -34,8 +34,8 @@ Across all roles, the distribution of early gold difference appears similar. No 
   src="{{ site.baseurl }}/assets/gold-diff-at-10.html"
   width="800"
   height="500"
-  frameborder="0"
-></iframe>
+  frameborder="0">
+</iframe>
 
 Although each role has a distinct function in League of Legends, their early-game gold differences at 10 minutes follow almost the same distribution. No lane consistently wins or loses early, which suggests that factors beyond the role, such as jungle interactions, matchup specifics, or early objectives, play a larger role in shaping early advantages.
 
