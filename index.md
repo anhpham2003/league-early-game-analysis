@@ -46,7 +46,7 @@ When the jungler is active before 10 minutes, lanes tend to have a higher gold d
 | Bot      | 0.469483  | 0.488984    | 0.343891   |
 | Jng      | 0.577716  | 0.789757    | 0.432768   |
 | Mid      | 0.429856  | 0.473241    | 0.354235   |
-| Sup      | 0.196074  | 0.940890    | 20.460307   |
+| Sup      | 0.196074  | 0.940890    | 20.460307  |
 | Top      | 0.341712  | 0.356045    | 0.432574   |
 
 This table compares early-game combat involvement across roles by looking at average kills, assists, and deaths at 10 minutes. Junglers stand out with the highest early kills and the second-highest assists, reflecting their role in influencing multiple lanes. Supports also show high assist numbers despite having very few kills, highlighting their team-oriented early playstyle. Laners such as top, mid, and bot have similar kill and death rates, while teams overall accumulate the most early action due to their summary rows.
@@ -100,18 +100,6 @@ We then create an “active jungler” indicator:
 
 `active = (killsat10 + assistsat10) > 0`
 
-### Preview of the Data (Junglers Only)
-<div style="overflow-x:auto;">
-
-| gameid   | year | side | playername  | result | killsat10 | assistsat10 | active |
-|---|---:|---|---|---:|---:|---:|---|
-| TRLH3/33 | 2014 | Blue | Cyanide     | 1 | 0 | 2 | True  |
-| TRLH3/33 | 2014 | Red  | Diamondprox | 0 | 2 | 0 | True  |
-| TRLH3/44 | 2014 | Blue | Amazing     | 1 | 1 | 1 | True  |
-| TRLH3/44 | 2014 | Red  | Shook       | 0 | 0 | 3 | True  |
-| TRLH3/76 | 2014 | Blue | Shook       | 0 | 0 | 0 | False |
-
-</div>
 
 ### Observed Statistic
 - Win rate with **active** junglers: **0.544**
@@ -199,7 +187,7 @@ From the observed data:
 This yields an observed test statistic:
 
 
-`T_{\text{obs}} = -0.0287`
+`T_obs = -0.0287`
 
 ---
 
