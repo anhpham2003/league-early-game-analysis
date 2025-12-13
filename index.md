@@ -71,60 +71,53 @@ The difference in average `killsat10` between rows where `firstbloodassist` is m
 We can see that the observed statistic lies near the center of the permutation distribution for `csdiffat10`. This indicates that there is no significant difference in average CS difference at 10 minutes between rows where `firstbloodassist` is missing and rows where it is not missing. Creep score differences reflect individual laning performance and are unrelated to whether a player participated in the First Blood assist. Therefore, the missingness of `firstbloodassist` does not depend on `csdiffat10`, suggesting it is MCAR with respect to this feature.
 
 ## Hypothesis Testing
+
 ### Research Question
-Does early jungle improvemen(kills or assists within the first 10 minutes) increase a team's likelihood of winning in professional League of Legends matches from 2014–2025?
+Does early jungle improvement (kills or assists within the first 10 minutes) increase a team's likelihood of winning in professional *League of Legends* matches from 2014–2025?
 
 ### Hypotheses
+**Null Hypothesis (H₀):** Early jungle involvement (kills or assists within the first 10 minutes) does not affect a team’s win rate.  
 
-**Null Hypothesis (H₀):**  
-Early jungle involvement (kills or assists within the first 10 minutes) does not affect a team’s win rate.
-
-**Alternative Hypothesis (H₁):**  
-Teams with early jungle involvement (at least one kill or assist within the first 10 minutes) are more likely to win.
-
----
+**Alternative Hypothesis (H₁):** Teams with early jungle involvement (at least one kill or assist within the first 10 minutes) are more likely to win.
 
 ### Test Statistic
+We use the difference in win rates:
 
-We define the test statistic as the difference in win rates:
-
-$$
-T = \hat{p}_{\text{active}} - \hat{p}_{\text{inactive}}
-$$
+`T = p_active − p_inactive`
 
 where:
-
-- $\hat{p}_{\text{active}}$ is the win rate when the jungler has at least one kill or assist at 10 minutes  
-- $\hat{p}_{\text{inactive}}$ is the win rate when the jungler has zero kills and assists at 10 minutes
+- `p_active` = win rate when the jungler has **≥ 1** kill/assist at 10 minutes  
+- `p_inactive` = win rate when the jungler has **0** kills and **0** assists at 10 minutes  
 
 ### Significance Level
+We use a significance level of **α = 0.10**.
 
-We use a significance level of:
+A 10% threshold is reasonable in competitive gaming analytics because matches are high-variance (draft, coordination, meta shifts). Missing a real early-game effect can be more costly than allowing a slightly higher false positive rate.
 
-$$
-\alpha = 0.10
-$$
+### Data Filtering and Feature Engineering
+Before testing, we filter to **only junglers** (`position == "jng"`).  
+We then create an “active jungler” indicator:
 
-A 10% significance level is appropriate in the context of competitive gaming analytics because the primary goal is to detect meaningful early-game effects. Missing a real impact of early jungle involvement would be more problematic than allowing a slightly higher false positive rate.
+`active = (killsat10 + assistsat10) > 0`
 
-Professional *League of Legends* matches are inherently high-variance due to factors such as player skill differences, draft composition, and in-game randomness. As a result, a more liberal significance threshold is reasonable when testing for early advantages that may influence match outcomes.
+### Preview of the Data (Junglers Only)
+<div style="overflow-x:auto;">
 
-Before doing this, we filter out to a dataset of only the jungle position. We create another column using one-hot encode which indicates if the jungler was active by this function `active` = `killsat10` + `assistantat10` > 0 (1 = True, 0 = False).
+| gameid   | year | side | playername  | result | killsat10 | assistsat10 | active |
+|---|---:|---|---|---:|---:|---:|---|
+| TRLH3/33 | 2014 | Blue | Cyanide     | 1 | 0 | 2 | True  |
+| TRLH3/33 | 2014 | Red  | Diamondprox | 0 | 2 | 0 | True  |
+| TRLH3/44 | 2014 | Blue | Amazing     | 1 | 1 | 1 | True  |
+| TRLH3/44 | 2014 | Red  | Shook       | 0 | 0 | 3 | True  |
+| TRLH3/76 | 2014 | Blue | Shook       | 0 | 0 | 0 | False |
 
-The head of the new table is below:
-| index | gameid     | year | league | date                | game | patch | teamid                                  | side | playername   | position | champion | result | goldat10 | xpat10 | csat10 | opp_goldat10 | opp_xpat10 | opp_csat10 | golddiffat10 | xpdiffat10 | csdiffat10 | killsat10 | assistsat10 | deathsat10 | kills | assists | deaths | firstblood | firstbloodkill | firstbloodassist | firstbloodvictim | active |
-|------:|------------|------|--------|---------------------|------|-------|------------------------------------------|------|--------------|----------|----------|--------|----------|--------|--------|--------------|------------|------------|--------------|------------|------------|-----------|-------------|-------------|-------|---------|--------|------------|----------------|------------------|------------------|--------|
-| 1     | TRLH3/33   | 2014 | EU LCS | 2014-01-14 17:52:02 | 1.0  | 3.15  | oe:team:78f183fa5a7d8ecb22b9ad272c3abd7 | Blue | Cyanide      | jng      | Vi       | 1      | 2335.0   | 2732.0 | 32.0   | 3437.0       | 4157.0     | 59.0       | -1102.0      | -1425.0    | -27.0      | 0.0       | 2.0         | 2.0         | 0     | 14      | 4      | 1.0        | 0.0            | 1.0              | 0.0              | True   |
-| 6     | TRLH3/33   | 2014 | EU LCS | 2014-01-14 17:52:02 | 1.0  | 3.15  | oe:team:3e18c32708da93cf6bdbd1d20b76731 | Red  | Diamondprox  | jng      | Shyvana  | 0      | 3437.0   | 4157.0 | 59.0   | 2335.0       | 2732.0     | 32.0       | 1102.0       | 1425.0     | 27.0       | 2.0       | 0.0         | 0.0         | 2     | 2       | 3      | 0.0        | 0.0            | 0.0              | 0.0              | True   |
-| 13    | TRLH3/44   | 2014 | EU LCS | 2014-01-14 19:16:29 | 1.0  | 3.15  | oe:team:6d92c120d5550d72128830b0a4df0f8 | Blue | Amazing      | jng      | Elise    | 1      | 2810.0   | 3945.0 | 38.0   | 2681.0       | 4014.0     | 40.0       | 129.0        | -69.0      | -2.0       | 1.0       | 1.0         | 0.0         | 4     | 9       | 0      | 0.0        | 0.0            | 0.0              | 0.0              | True   |
-| 18    | TRLH3/44   | 2014 | EU LCS | 2014-01-14 19:16:29 | 1.0  | 3.15  | oe:team:05bd29b524f0851d42e7902d6af59bf | Red  | Shook        | jng      | Vi       | 0      | 2681.0   | 4014.0 | 40.0   | 2810.0       | 3945.0     | 38.0       | -129.0       | 69.0       | 2.0        | 0.0       | 3.0         | 0.0         | 1     | 6       | 2      | 1.0        | 0.0            | 1.0              | 0.0              | True   |
-| 25    | TRLH3/76   | 2014 | EU LCS | 2014-01-14 21:28:45 | 1.0  | 3.15  | oe:team:05bd29b524f0851d42e7902d6af59bf | Blue | Shook        | jng      | Lee Sin  | 0      | 2704.0   | 3736.0 | 50.0   | 2318.0       | 3189.0     | 41.0       | 386.0        | 547.0      | 9.0        | 0.0       | 0.0         | 0.0         | 0     | 5       | 1      | 0.0        | 0.0            | 0.0              | 0.0              | False  |
+</div>
 
+### Observed Statistic
+- Win rate with **active** junglers: **0.544**
+- Win rate with **inactive** junglers: **0.433**
+- Observed difference: **T_obs = 0.111**
 
-From our observed statistic:
-- The win rate of active junglers: 0.544
-- The win rate of inactive junglers: 0.433
-- The observed different in win rate: 0.111
 
 ![Permutation distribution of win-rate differences](charts/permutation-distr-winRates-dff.png)
 
@@ -157,7 +150,7 @@ To ensure we only use information available at prediction time, we restrict feat
 ## Baseline Model
 For the baseline model, we used a Logistic Regression classifier to predict game outcomes (result). The model includes five features: golddiffat10, xpdiffat10, csdiffat10, firstblood, and side. Among these features, golddiffat10, xpdiffat10, and csdiffat10 are quantitative variables that capture early-game economic and resource advantages at 10 minutes. Since these variables are already on comparable numeric scales, we applied passthrough preprocessing without additional scaling. The remaining two features, firstblood and side, are categorical variables. We applied one-hot encoding to these features, dropping the first category to avoid multicollinearity.
 
-We split the data into training and testing sets using an 80/20 stratified split to preserve the class distribution of the target variable. After fitting the model on the training data, the baseline Logistic Regression model achieved an accuracy of 0.622 and an F1-score of 0.618 on the test set. These results indicate that the model performs moderately better than random guessing, suggesting that early-game gold, experience, and CS advantages provide meaningful predictive signal for match outcomes. However, the overall performance remains limited, highlighting substantial room for improvement through incorporating additional features and exploring more expressive models or hyperparameter tuning in subsequent sections.
+We split the data into training and testing sets using an 80/20 stratified split to preserve the class distribution of the target variable. After fitting the model on the training data, the baseline Logistic Regression model achieved an **accuracy of 0.622** and an **F1-score of 0.61**8** on the test set. These results indicate that the model performs moderately better than random guessing, suggesting that early-game gold, experience, and CS advantages provide meaningful predictive signal for match outcomes. However, the overall performance remains limited, highlighting substantial room for improvement through incorporating additional features and exploring more expressive models or hyperparameter tuning in subsequent sections.
 
 ## Final Model
 In our final model, we introduced two engineered early-game features: `kpa10` and `kda10`. The feature `kpa10`, defined as the sum of kills and assists at 10 minutes, captures a player’s early-game participation in team fights and skirmishes, which is especially important for jungle players whose impact often comes from ganks and map pressure rather than lane farming alone. The feature `kda10`, defined as 
@@ -197,9 +190,7 @@ Team-level rows are excluded to ensure the comparison focuses only on individual
 
 The test statistic is defined as the difference in F1-scores between the two groups:
 
-$$
-T = \text{F1}_{\text{lane}} - \text{F1}_{\text{jungle}}
-$$
+`T = F1_lane − F1_jungle`
 
 From the observed data:
 - **F1 (Jungle):** 0.633  
@@ -207,9 +198,8 @@ From the observed data:
 
 This yields an observed test statistic:
 
-$$
-T_{\text{obs}} = -0.0287
-$$
+
+`T_{\text{obs}} = -0.0287`
 
 ---
 
