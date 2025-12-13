@@ -22,7 +22,7 @@ For the League of Legends' datasets, we decided to assess the commmon columns an
 To understand the influence of jungle activity, we investigate the gold difference at the 10-minute mark across roles in the game.
 
 <iframe
-  src="assets/gold-diff-10-by-role.html"
+  src="{{ site.baseurl }}/assets/gold-diff-at-10-by-role.html"
   width="800"
   height="500"
   frameborder="0"
@@ -31,7 +31,7 @@ To understand the influence of jungle activity, we investigate the gold differen
 Across all roles, the distribution of early gold difference appears similar. No role consistently dominates or falls behind at 10 minutes, suggesting that early-game performance varies mainly from game-to-game rather than being role-driven. This motivates examining other factors such as jungle presence to explain early advantages.
 
 <iframe
-  src="assets/gold-diff-at-10-by-role.html.html"
+  src="{{ site.baseurl }}/assets/gold-diff-at-10.html"
   width="800"
   height="500"
   frameborder="0"
